@@ -11,6 +11,22 @@
             <Setter Property="Height" Value="50px"></Setter>
             <Setter Property="DockPanel.Dock" Value="Right"></Setter>
             <Setter Property="Margin" Value="10px"></Setter>
+            <Setter Property="Visibility" Value="Collapsed"></Setter>
+            
+        </Style>
+        <Style TargetType="{x:Type Image}" BasedOn="{StaticResource iconoGrupo}" x:Key="iconoVengador">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Vengador}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type Image}" BasedOn="{StaticResource iconoGrupo}" x:Key="iconoXmen">
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Xmen}" Value="True">
+                    <Setter Property="Visibility" Value="Visible"/>
+                </DataTrigger>
+            </Style.Triggers>
         </Style>
         <Style TargetType="{x:Type Image}" x:Key="flecha">
             <Setter Property="Height" Value="25px"></Setter>
@@ -28,16 +44,49 @@
                     <DropShadowEffect></DropShadowEffect>
                 </Setter.Value>
             </Setter>
+            <Style.Triggers>
+                <EventTrigger RoutedEvent="MouseEnter">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="58" Duration="0:0:1"></DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+                <EventTrigger RoutedEvent="MouseLeave">
+                    <BeginStoryboard>
+                        <Storyboard>
+                            <DoubleAnimation Storyboard.TargetProperty="FontSize" To="36" Duration="0:0:1"></DoubleAnimation>
+                        </Storyboard>
+                    </BeginStoryboard>
+                </EventTrigger>
+            </Style.Triggers>
         </Style>
-        <local:booleanToVisibilityConverter x:Key="iconosConversor"></local:booleanToVisibilityConverter>
-        <local:booleanToBackgroundColor x:Key="fondoConversor"></local:booleanToBackgroundColor>
+        <Style TargetType="{x:Type Border}" x:Key="imagenHeroe">
+            <Setter Property="Margin" Value="10"/>
+            <Setter Property="Opacity" Value="0.5"/>
+            <Setter Property="BorderBrush" Value="Black"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Opacity" Value="1"/>
+                    <Setter Property="BorderThickness" Value="3"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+        <Style TargetType="{x:Type DockPanel}">
+            <Setter Property="Background" Value="IndianRed"></Setter>
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding Path=Heroe}" Value="True">
+                    <Setter Property="Background" Value="PaleGreen"></Setter>
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
     </Window.Resources>
-    
-    <DockPanel x:Name="contenedorDockPanel" Background="{Binding Path=Heroe, Converter={StaticResource fondoConversor}}">
+
+    <DockPanel x:Name="contenedorDockPanel">
         <DockPanel DockPanel.Dock="Top" LastChildFill="False">
             <TextBlock Text="{Binding Path=Nombre}" Style="{StaticResource nombreHeroe}"></TextBlock>
-            <Image Visibility="{Binding Path=Vengador,Converter={StaticResource iconosConversor}}" x:Name="iconoAvengersImage" Style="{StaticResource iconoGrupo}" Source="assets/avengers.png"></Image>
-            <Image Visibility="{Binding Path=Xmen,Converter={StaticResource iconosConversor}}" x:Name="iconoXmenImage" Style="{StaticResource iconoGrupo}" Source="assets/xmen.png"></Image>
+            <Image  x:Name="iconoAvengersImage" Style="{StaticResource iconoVengador}" Source="assets/avengers.png"></Image>
+            <Image  x:Name="iconoXmenImage" Style="{StaticResource iconoXmen}" Source="assets/xmen.png"></Image>
         </DockPanel>
         <StackPanel DockPanel.Dock="Bottom" Orientation="Horizontal" HorizontalAlignment="Center">
             <Image Style="{StaticResource flecha}" Tag="Anterior"></Image>
@@ -53,6 +102,8 @@
                 </Image.RenderTransform>
             </Image>
         </StackPanel>
-        <Image Source="{Binding Path=Imagen}" Stretch="UniformToFill" Margin="10"></Image>
+        <Border Style="{StaticResource imagenHeroe}">
+            <Image Source="{Binding Path=Imagen}" Stretch="UniformToFill"></Image>
+        </Border>
     </DockPanel>
 </Window>
